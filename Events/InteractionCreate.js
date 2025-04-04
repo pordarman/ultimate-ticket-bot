@@ -1,0 +1,74 @@
+"use strict";
+const {
+    BaseInteraction,
+    Events,
+    PermissionFlagsBits,
+    MessageFlags
+} = require("discord.js");
+const Util = require("../Helpers/Util.js");
+
+module.exports = {
+    name: Events.InteractionCreate,
+    /**
+     *
+     * @param {BaseInteraction} int
+     */
+    async execute(int) {
+        // Eğer butona tıkladıysa veya modal gönderdiyse
+        if (int.isButton() || int.isModalSubmit()) {
+
+            const [customId, ...args] = int.customId.split("-");
+
+            // Eğer customId COMMAND diye başlıyorsa hiçbir şey yapma
+            if (customId.startsWith("COMMAND")) return;
+
+            const command = Util.getButtonCommand(customId);
+            if (!command) return;
+
+            // Eğer komutun çalışması için gerekli rolleri veya yetkisi yoksa
+            if (command.isAdmin && !int.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                const memberRoles = new Set(Array.isArray(msg.member.roles) ? msg.member.roles : msg.member.roles.cache.map(role => role.id));
+                const requiredRoles = process.env.ADMIN_ROLES?.split(",")?.map(role => role.trim()) || [];
+
+                const hasRequiredRole = requiredRoles.some(role => memberRoles.has(role));
+                if (!hasRequiredRole) return Util.error(int, `Bu işlemi yapamazsın!`);
+            }
+
+            // Eğer botta "Kanalı Yönet" yetkisi yoksa
+            if (!int.guild.members.me.permissions.has(PermissionFlagsBits.ManageChannels)) return Util.error(int, `Botun "Kanalı Yönet" yetkisi yok!`);
+
+            // Komutu çalıştırmaya çalış
+            try {
+                Util.console.log(`Kullanıcı: ${int.user.tag} | Buton: ${customId} | Argümanlar: ${args}`);
+                await command.execute(int, ...args);
+            } catch (error) {
+                int.reply({
+                    content: "Komut çalıştırılırken bir hata oluştu! Hata bilgileri konsolda gösterilecektir.",
+                    flags: MessageFlags.Ephemeral
+                });
+                Util.console.error(error.stack);
+            }
+        }
+
+        // Eğer slash komutuysa
+        if (int.isChatInputCommand()) {
+            const command = Util.getSlashCommand(int.commandName);
+            if (!command) return;
+
+            // Eğer botta "Kanalı Yönet" yetkisi yoksa
+            if (!int.guild.members.me.permissions.has(PermissionFlagsBits.ManageChannels)) return Util.error(int, `Botun "Kanalı Yönet" yetkisi yok!`);
+
+            // Komutu çalıştırmaya çalış
+            try {
+                Util.console.log(`Kullanıcı: ${int.user.tag} | Slash: ${int.commandName}`);
+                await command.execute(int);
+            } catch (error) {
+                int.reply({
+                    content: "Komut çalıştırılırken bir hata oluştu! Hata bilgileri konsolda gösterilecektir.",
+                    flags: MessageFlags.Ephemeral
+                });
+                Util.console.error(error.stack);
+            }
+        }
+    },
+};
