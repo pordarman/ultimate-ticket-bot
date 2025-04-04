@@ -23,8 +23,8 @@ Merhaba! Bu proje, Discord sunucunuzda profesyonel ve form tabanlı bir destek s
 ### 1. Klasörü İndir / Klonla
 
 ```bash
-git clone https://github.com/pordarman/ticket-bot.git
-cd ticket-bot
+git clone https://github.com/pordarman/ultimate-ticket-bot.git
+cd ultimate-ticket-bot
 ```
 
 ### 2. Gerekli Paketleri Yükle
@@ -117,7 +117,7 @@ start.bat
 ### Linux için (PM2 ile)
 ```bash
 npm i -g pm2
-pm2 start index.js --name ticket-bot
+pm2 start index.js --name TicketBot
 ```
 
 > ✅ Eğer `.env` dosyasındaki zorunlu alanlar eksikse bot başlamaz. Konsolda detaylı uyarı verilir.
@@ -130,7 +130,7 @@ pm2 start index.js --name ticket-bot
 
 2. PM2 kullanıyorsanız dosyaları bota yükleyin ve botu tekrardan başlatın
 ```bash
-pm2 restart ticket-bot
+pm2 restart TicketBot
 ```
 
 ---
