@@ -27,13 +27,6 @@ const path = require("path");
 const database = require("./Helpers/Database"); // Veritabanı bağlantısı
 const Util = require("./Helpers/Util"); // Yardımcı fonksiyonlar
 
-// client önbellek tanımlamaları
-client.prefixCommands = new Collection(); // Prefix komutları
-client.buttonCommands = new Collection(); // Buton komutları
-client.slashCommands = new Collection(); // Slash komutları
-client.slashDataJSON = []; // Slash komutları için JSON verisi
-client.cooldown = new Collection(); // Bekleme süreleri ile ilgili veriler
-
 client.setMaxListeners(0); // Konsola hata vermemesi için
 
 // Yardımcı komut yüklemeleri
