@@ -142,7 +142,9 @@ module.exports = {
                         category: ticketCategory,
                         urgency: ticketUrgency,
                         ticketId: userTicketInfo.currentTicket.ticketId,
+                        status: "opened",
                         lastUpdatedTimestamp: NOW,
+                        messageCount: 0,
                     });
                 }
                 // Eğer ticket varsa güncelle
@@ -298,7 +300,9 @@ module.exports = {
                 category: ticketCategory,
                 urgency: ticketUrgency,
                 ticketId,
+                status: "opened",
                 lastUpdatedTimestamp: NOW,
+                messageCount: 0,
             }),
             database.updateUser(int.user.id, {
                 $set: {
