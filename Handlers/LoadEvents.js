@@ -52,7 +52,7 @@ module.exports = (client, dirname, printConsole = true) => {
             } else if (file.endsWith(".js")) {
                 try {
                     delete require.cache[require.resolve(filePath)];
-                    
+
                     const command = require(filePath);
                     client[command.once ? "once" : "on"](command.name, (...args) => command.execute(...args));
                     printOrAddToOutput(`${command.name} adlı event yüklendi!`, "success");

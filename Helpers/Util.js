@@ -36,7 +36,7 @@ let slashDataJSON = [];
 
 /**
  * @typedef {Object} LogObject
- * @property {ButtonInteraction} int - ButtonInteraction
+ * @property {ButtonInteraction|Message} int - ButtonInteraction
  * @property {String} channelId - Kanal ID
  * @property {String} ticketId - Ticket numarası
  * @property {"ticket_opened" | "ticket_reopened" | "ticket_closed" | "ticket_permclosed" | "ticket_archived" | "user_call" | "channel_delete"} action - Log tipi
@@ -74,6 +74,16 @@ class Util {
             ],
             flags: MessageFlags.Ephemeral
         });
+    }
+
+
+    get reasons() {
+        return {
+            archived: "Bilet arşivlendi!",
+            closed: "Bilet kapatıldı!",
+            permclosed: "Bilet kalıcı olarak kapatıldı!",
+            call: "Kullanıcı çağrıldı!"
+        }
     }
 
     /**
@@ -119,6 +129,15 @@ class Util {
      */
     getPrefixCommandWithId(commandId) {
         return prefixCommands.get(prefixCommandWithId.get(commandId));
+    }
+
+
+    /**
+     * Prefix komutlarının ID'sini ve komutları döndürür
+     * @returns {Map<String, String>} - Komutlar
+     */
+    getPrefixCommandIds() {
+        return prefixCommandWithId;
     }
 
 
@@ -238,6 +257,23 @@ class Util {
 
 
     /**
+     * Kullanıcının moderatör olup olmadığını kontrol eder
+     * @param {GuildMember} member - Kullanıcı
+     * @returns {Boolean} - Kullanıcı moderatör mü?
+     */
+    isModerator(member) {
+        // Eğer kişi yönetici ise return true
+        if (member.permissions.has(PermissionsBitField.Flags.Administrator)) return true;
+
+        // Eğer mod rolleri yoksa false döndür
+        if (process.env.MOD_ROLE_IDS == null) return false;
+
+        const modRolesSet = new Set(process.env.MOD_ROLE_IDS.split(",").map(role => role.trim()));
+        return member.roles.cache.some(role => modRolesSet.has(role.id));
+    }
+
+
+    /**
      * Ticket kanalına mesaj gönderir
      * @param {TextChannel} channel - Ticket kanalı
      * @returns {Promise<Message>} - Gönderilen mesaj
@@ -296,9 +332,9 @@ class Util {
      */
     interactionToMessage(int, { content, mentions } = {}) {
         const message = int;
-        
+
         // Eğer message objesinde "content: ''" ifadesi yoksa ekle
-        if (!message.content) message.content = content || null;
+        if (!message.content) message.content = content || "";
 
         // message.author'u message.user yap ve sil
         message.author = message.user;
@@ -319,6 +355,19 @@ class Util {
         }
 
         return message;
+    }
+
+
+    /**
+     * Girilen message objesini buton interaction objesine çevirir
+     * @param {Message} message - Message objesi
+     * @returns {ButtonInteraction} - Interaction objesi
+     */
+    messageToButtonInteraction(message) {
+        const int = message;
+        int.user = int.author;
+
+        return int;
     }
 
 
@@ -352,6 +401,34 @@ class Util {
      */
     truncateString(string, length) {
         return string.length > length ? string.slice(0, length - 3) + "..." : string;
+    }
+
+
+    /**
+    * .slice .map ve .join komutlarını art arda kullanmaya gerek kalmadan hepsini tek bir döngüde yapmanızı sağlar
+    * @param {Array|Collection} array 
+    * @param {Number} startIndex
+    * @param {Number} endIndex
+    * @param {(any, index) => String} mapCallback 
+    * @param {String} joinString 
+    * @returns {String}
+    */
+    sliceMapAndJoin(array, startIndex, endIndex, mapCallback, joinString) {
+        let finalStr = "";
+
+        // Eğer array bir Collection ise array'a çevir
+        if (array.size) array = [...array.values()];
+
+        const minForLoop = Math.min(endIndex, array.length);
+
+        for (let i = startIndex; i < minForLoop; ++i) {
+            const result = mapCallback(array[i], i);
+
+            // Eğer ilk döngüdeyse joinString'i ekleme
+            finalStr += (i == 0 ? "" : joinString) + result
+        }
+
+        return finalStr;
     }
 
 
@@ -450,6 +527,8 @@ class Util {
                 deny
             });
         }
+        
+        console.log(options);
 
         return options;
 
@@ -605,7 +684,7 @@ class Util {
                     .addFields(
                         {
                             name: `Bilgileri`,
-                            value: `**• Yetkili:** ${otherInfo.deleteUser ? `${otherInfo.deleteUser.user.tag} - ${otherInfo.deleteUser.id}` : "Bilinmiyor"}\n` +
+                            value: `**• Yetkili:** ${otherInfo.deleteUser ? `${otherInfo.deleteUser.tag} - ${otherInfo.deleteUser.id}` : "Bilinmiyor"}\n` +
                                 `**• Kanal:** <#${channelId}> - ${channelId}\n` +
                                 `**• Bilet sahibi:** ${otherInfo.ticketAuthorUserName} - <@${ticketAuthorId}>\n` +
                                 `**• Ticket ID:** ${ticketId}\n` +

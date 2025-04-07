@@ -43,7 +43,7 @@ module.exports = {
                 await command.execute(int, ...args);
             } catch (error) {
                 int.reply({
-                    content: "Komut çalıştırılırken bir hata oluştu! Hata bilgileri konsolda gösterilecektir.",
+                    content: "Komut çalıştırılırken bir hata oluştu! Hata bilgileri konsolda gösterilecektir",
                     flags: MessageFlags.Ephemeral
                 });
                 Util.console.error(error.stack);
@@ -64,7 +64,7 @@ module.exports = {
                 await command.execute(int);
             } catch (error) {
                 int.reply({
-                    content: "Komut çalıştırılırken bir hata oluştu! Hata bilgileri konsolda gösterilecektir.",
+                    content: "Komut çalıştırılırken bir hata oluştu! Hata bilgileri konsolda gösterilecektir",
                     flags: MessageFlags.Ephemeral
                 });
                 Util.console.error(error.stack);

@@ -2,6 +2,7 @@
 const mongodb = require("mongodb");
 const client = new mongodb.MongoClient(process.env.MONGO_URI);
 const LRUCache = require("lru-cache");
+const os = require("os");
 
 const userCaches = new LRUCache.LRUCache({
     max: 10_000,
@@ -161,8 +162,10 @@ class MongoDB {
         };
 
         // PM2 üzerinden kapatma sinyalleri için
-        process.on("SIGINT", shutdown);  // Terminalden elle kapatma
-        process.on("SIGTERM", shutdown); // PM2 restart/stop için
+        process.on(
+            os.platform() == "win32" ? "SIGINT" : "SIGTERM",
+            shutdown
+        );
 
         return true;
     }
@@ -260,7 +263,7 @@ class MongoDB {
             { $inc: { value: 1 } },
             { returnDocument: "after", upsert: true }
         );
-        
+
         if (result === null) {
             await this.counters.insertOne({ value: 1 });
             return 1;
@@ -304,7 +307,7 @@ class MongoDB {
         userCaches.set(userId, newUser);
         return newUser;
     }
-    
+
 
 
     /**
@@ -538,7 +541,7 @@ class MongoDB {
         };
         ticketLog.logs.unshift(logObject);
         ticketLog.lastUpdatedTimestamp = NOW;
-        
+
         await this.updateLog(ticketInfo.ticketId, {
             $set: {
                 lastUpdatedTimestamp: ticketLog.lastUpdatedTimestamp
@@ -550,7 +553,7 @@ class MongoDB {
                 }
             }
         });
-        
+
         return true;
     }
 
