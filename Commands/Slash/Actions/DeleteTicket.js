@@ -14,8 +14,8 @@ module.exports = {
         .setDescription(prefixCommand.description),
 
     /**
-     * 
-     * @param {ChatInputCommandInteraction} int
+     * Parametrelerdeki isimlerin ne olduklarını tanımlar
+     * @param {ChatInputCommandInteraction} int - Slash komut etkileşimi
      */
     async execute(int) {
         const message = Util.interactionToMessage(int);

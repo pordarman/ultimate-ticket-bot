@@ -9,9 +9,10 @@ const Util = require("../Helpers/Util");
 
 module.exports = {
     name: Events.MessageCreate,
+    
     /**
-     *
-     * @param {Message} msg
+     * Parametrelerdeki isimlerin ne olduklarını tanımlar
+     * @param {Message} msg - Mesaj
      */
     async execute(msg) {
 

@@ -25,9 +25,10 @@ module.exports = {
 
     /**
      * Parametrelerdeki isimlerin ne olduklarını tanımlar
-     * @param {Message} msg
+     * @param {Message} msg - Mesaj objesi
+     * @param {String[]} args - Komutun argümanları
      */
-    async execute(msg) {
+    async execute(msg, args) {
 
         // Bütün açık bilet kanallarını çek
         const ticketChannels = await database.getTicketsByFilter({

@@ -1,10 +1,7 @@
 "use strict";
 const {
     Message,
-    PermissionFlagsBits,
 } = require("discord.js");
-const loadCommands = require("../../../Handlers/LoadCommands.js");
-const loadEvents = require("../../../Handlers/LoadEvents.js");
 const path = require("path");
 
 module.exports = {
@@ -26,13 +23,27 @@ module.exports = {
 
     /**
      * Parametrelerdeki isimlerin ne olduklarını tanımlar
-     * @param {Message} msg
+     * @param {Message} msg - Mesaj objesi
+     * @param {String[]} args - Komutun argümanları
      */
-    async execute(msg) {
+    async execute(msg, args) {
 
         const mainPath = __dirname.split(`${path.sep}Commands${path.sep}`)[0];
 
-        msg.client.removeAllListeners();
+        // Helpers ve Handlers dizinlerini temizle
+        const helpers = fs.readdirSync(path.join(mainPath, "Helpers"));
+        for (const helper of helpers) {
+            delete require.cache[require.resolve(`../Helpers/${helper}`)];
+        }
+
+        const handlers = fs.readdirSync(path.join(mainPath, "Handlers"));
+        for (const handler of handlers) {
+            delete require.cache[require.resolve(`../Handlers/${handler}`)];
+        }
+
+        // Komutları ve eventleri yeniden yükle
+        const loadCommands = require("../../../Handlers/LoadCommands.js"); // Burada komutları otomatik olarak silen ve yükleyen bir fonksiyon var ve eğer hata varsa hata mesajını döner
+        const loadEvents = require("../../../Handlers/LoadEvents.js"); // Burada eventleri otomatik olarak silen ve yükleyen bir fonksiyon var ve eğer hata varsa hata mesajını döner
 
         const errorResult = [
             ...loadCommands(null, mainPath, false),

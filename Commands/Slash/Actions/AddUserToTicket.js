@@ -20,8 +20,8 @@ module.exports = {
         ),
 
     /**
-     * 
-     * @param {ChatInputCommandInteraction} int
+     * Parametrelerdeki isimlerin ne olduklarını tanımlar
+     * @param {ChatInputCommandInteraction} int - Slash komut etkileşimi
      */
     async execute(int) {
         const user = int.options.getUser("user", true);

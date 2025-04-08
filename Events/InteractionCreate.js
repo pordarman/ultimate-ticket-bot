@@ -9,9 +9,10 @@ const Util = require("../Helpers/Util.js");
 
 module.exports = {
     name: Events.InteractionCreate,
+    
     /**
-     *
-     * @param {BaseInteraction} int
+     * Parametrelerdeki isimlerin ne olduklarını tanımlar
+     * @param {BaseInteraction} int - Etkileşim
      */
     async execute(int) {
         // Eğer butona tıkladıysa veya modal gönderdiyse

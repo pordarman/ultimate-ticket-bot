@@ -5,7 +5,7 @@ const Util = require("../Helpers/Util");
 const { Client } = require("discord.js");
 
 /**
- * 
+ * Prefix, buton ve slash komutlarını yükler
  * @param {Client} _ - Discord.js istemcisi
  * @param {String} dirname - Klasör yolu (Ana dizin)
  * @param {Boolean} printConsole - Konsola çıktı verilsin mi? (Eğer false ise bir dizi oluşturulur ve hata mesajları buraya eklenir)
@@ -21,10 +21,10 @@ module.exports = (_, dirname, printConsole = true) => {
     Util.clearSlashDataJSON();
 
     /**
-     * 
-     * @param {String} message 
-     * @param {"log"|"warn"|"success"|"error"} type 
-     * @param {Boolean} onlyConsole - Sadece konsola yazdırılsın mı? (Eğer true ise hata mesajları dizisine eklenmez)
+     * Konsola yazdırma veya hata mesajları dizisine ekleme fonksiyonu
+     * @param {String} message - Konsola yazdırılacak veya hata mesajları dizisine eklenecek mesaj
+     * @param {"log"|"warn"|"success"|"error"} type - Konsola yazdırılacak mesajın tipi (log, warn, success, error)
+     * @param {Boolean} [onlyConsole=false] - Sadece konsola yazdırılsın mı? (Eğer true ise hata mesajları dizisine eklenmez)
      */
     function printOrAddToOutput(message, type, onlyConsole = false) {
         if (onlyConsole || printConsole) {
@@ -36,7 +36,7 @@ module.exports = (_, dirname, printConsole = true) => {
             );
         }
     }
-
+    
     // Bütün komutları yükleme fonksiyonu
     function loadAllCommands(path) {
 

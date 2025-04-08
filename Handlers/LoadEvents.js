@@ -7,7 +7,7 @@ const Util = require("../Helpers/Util");
 
 
 /**
- * 
+ * Eventleri yükler
  * @param {Client} client - Discord Client 
  * @param {String} dirname - Klasör yolu (Ana dizin)
  * @param {Boolean} printConsole - Konsola çıktı verilsin mi? (Eğer false ise bir dizi oluşturulur ve hata mesajları buraya eklenir)
@@ -20,10 +20,10 @@ module.exports = (client, dirname, printConsole = true) => {
     client.removeAllListeners(); // Tüm eventleri kaldır
 
     /**
-      * 
-      * @param {String} message 
-      * @param {"log"|"warn"|"success"|"error"} type 
-      * @param {Boolean} onlyConsole - Sadece konsola yazdırılsın mı? (Eğer true ise hata mesajları dizisine eklenmez)
+      * Konsola yazdırma veya hata mesajları dizisine ekleme fonksiyonu
+      * @param {String} message - Konsola yazdırılacak veya hata mesajları dizisine eklenecek mesaj
+      * @param {"log"|"warn"|"success"|"error"} type - Konsola yazdırılacak mesajın tipi (log, warn, success, error)
+      * @param {Boolean} [onlyConsole=false] - Sadece konsola yazdırılsın mı? (Eğer true ise hata mesajları dizisine eklenmez)
       */
     function printOrAddToOutput(message, type, onlyConsole = false) {
         if (onlyConsole || printConsole) {

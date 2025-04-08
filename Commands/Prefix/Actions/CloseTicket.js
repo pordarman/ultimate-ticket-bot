@@ -21,8 +21,8 @@ module.exports = {
 
     /**
      * Parametrelerdeki isimlerin ne olduklarını tanımlar
-     * @param {Message} msg
-     * @param {String[]} args
+     * @param {Message} msg - Mesaj objesi
+     * @param {String[]} args - Komutun argümanları
      */
     async execute(msg, args) {
         const reason = args.join(" ") || Util.reasons.archived;

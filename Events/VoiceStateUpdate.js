@@ -7,10 +7,11 @@ const Util = require("../Helpers/Util.js");
 
 module.exports = {
     name: "voiceStateUpdate",
+    
     /**
-     * 
-     * @param {VoiceState} oldVoice 
-     * @param {VoiceState} newVoice 
+     * Parametrelerdeki isimlerin ne olduklarını tanımlar
+     * @param {VoiceState} oldVoice - Eski ses durumu
+     * @param {VoiceState} newVoice - Yeni ses durumu
      */
     async run(oldVoice, newVoice) {
         try {

@@ -14,9 +14,10 @@ const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 module.exports = {
     name: Events.ClientReady,
     once: true, // Bu event sadece bir kez çalıştırılacak
+    
     /**
-     * 
-     * @param {Client} client 
+     * Parametrelerdeki isimlerin ne olduklarını tanımlar
+     * @param {Client} client - Discord istemcisi
      */
     async execute(client) {
         const NOW = Date.now();

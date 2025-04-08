@@ -16,8 +16,8 @@ module.exports = {
     name: "createTicket",
 
     /**
-     *  
-     * @param {ModalSubmitInteraction} int
+     * Parametrelerdeki isimlerin ne olduklarını tanımlar
+     * @param {ModalSubmitInteraction} int - Modal
      */
     async execute(int) {
         const NOW = Date.now();

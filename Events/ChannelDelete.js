@@ -10,9 +10,10 @@ const Util = require("../Helpers/Util");
 
 module.exports = {
     name: Events.ChannelDelete,
+    
     /**
-     *
-     * @param {GuildChannel} channel
+     * Parametrelerdeki isimlerin ne olduklarını tanımlar
+     * @param {GuildChannel} channel - Silinen kanal
      */
     async execute(channel) {
         // Eğer kanal bir sunucu kanalı değilse bir şey yapma

@@ -7,7 +7,6 @@ const {
   Client,
   GatewayIntentBits,
   RESTJSONErrorCodes,
-  Collection,
 } = require("discord.js");
 const client = new Client({
   intents: [
