@@ -8,8 +8,6 @@ const database = require("../Helpers/Database.js");
 const Util = require("../Helpers/Util.js");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v10");
-const fs = require("fs");
-const path = require("path");
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 
@@ -22,21 +20,6 @@ module.exports = {
      * @param {Client} client - Discord istemcisi
      */
     async execute(client) {
-        const result = [];
-        function a(_path) {
-            const files = fs.readdirSync(_path);
-            for (const file of files) {
-                const filePath = path.join(_path, file);
-                if (fs.statSync(filePath).isDirectory()) {
-                    a(filePath);
-                } else {
-                    const command = require(filePath);
-                    result.push(`\`!${command.name}\` | ${command.description} | ${command.isAdmin ? "Admin" : "Yönetici"}`);
-                }
-            }
-        }
-        a(String.raw`C:\Users\Alisa\Desktop\BionlukBots\Ticket\Commands\Prefix`);
-        console.log(result.join("\n"));
 
         const NOW = Date.now();
 
