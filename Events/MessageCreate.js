@@ -32,23 +32,20 @@ module.exports = {
 
         if (command.isOwner) {
             const owners = process.env.OWNER_IDS?.split(",")?.map(owner => owner.trim()) || [];
-            if (!owners.includes(msg.author.id)) {
-                Util.error(msg, "Bu komutu kullanmak için yetkiniz yok!");
-                return;
-            }
+            if (!owners.includes(msg.author.id)) return Util.error(msg, "Bu komutu kullanmak için yetkiniz yok!");
         }
 
         // Eğer komutun çalışması için gerekli rolleri veya yetkisi yoksa
         if (command.isAdmin && !msg.member.permissions.has(PermissionFlagsBits.Administrator)) {
             const memberRoles = new Set(Array.isArray(msg.member.roles) ? msg.member.roles : msg.member.roles.cache.map(role => role.id));
-            const requiredRoles = process.env.ADMIN_ROLES?.split(",")?.map(role => role.trim()) || [];
+            const requiredRoles = process.env.MOD_ROLE_IDS?.split(",")?.map(role => role.trim()) || [];
 
             const hasRequiredRole = requiredRoles.some(role => memberRoles.has(role));
-            if (!hasRequiredRole) Util.error(msg, "Bu işlemi yapamazsın!");
+            if (!hasRequiredRole) return Util.error(msg, "Bu işlemi yapamazsın!");
         }
 
         // Eğer botta "Kanalı Yönet" yetkisi yoksa
-        if (!msg.guild.members.me.permissions.has(PermissionFlagsBits.ManageChannels)) Util.error(msg, `Botun "Kanalı Yönet" yetkisi yok!`);
+        if (!msg.guild.members.me.permissions.has(PermissionFlagsBits.ManageChannels)) return Util.error(msg, `Botun "Kanalı Yönet" yetkisi yok!`);
 
         try {
             Util.console.log(`Kullanıcı: ${msg.author.tag} | Komut: ${commandName} | Argümanlar: ${args.join(" ") || "*Hiçbir argüman yok*"} | Kanal: ${msg.channel.name}`);

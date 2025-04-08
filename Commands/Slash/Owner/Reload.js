@@ -4,7 +4,7 @@ const {
     ChatInputCommandInteraction
 } = require("discord.js");
 const Util = require("../../../Helpers/Util.js");
-const prefixCommand = require("../../Prefix/Infos/ClosedTicketChannels.js");
+const prefixCommand = require("../../Prefix/Owner/Reload.js");
 
 module.exports = {
     name: prefixCommand.name, // Komutun ismi

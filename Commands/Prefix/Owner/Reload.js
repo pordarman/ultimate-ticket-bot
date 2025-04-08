@@ -19,6 +19,7 @@ module.exports = {
         "r"
     ],
     description: "Komutları yeniden yükler. (Sadece bot sahibi tarafından kullanılabilir)", // Komutun açıklaması
+    isAdmin: false, // Komutun sadece yönetici tarafından kullanılabilir olduğunu belirtir
     isOwner: true, // Komutun sadece bot sahibi tarafından kullanılabilir olduğunu belirtir.
 
     /**

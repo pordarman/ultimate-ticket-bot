@@ -19,6 +19,11 @@ const logCaches = new LRUCache.LRUCache({
     ttl: 1000 * 60 * 60, // 1 saat
     updateAgeOnGet: true
 });
+const blacklistCaches = new LRUCache.LRUCache({
+    max: 10_000,
+    ttl: 1000 * 60 * 60, // 1 saat
+    updateAgeOnGet: true
+});
 
 const updateCache = new Map();
 const updateTimers = new Map();
@@ -101,6 +106,14 @@ let isClosing = false;
  * @property {TicketLogArrayObject[]} logs - Log mesajlarının verileri
  */
 
+/**
+ * @typedef {Object} BlacklistObject
+ * @property {String} userId - Kullanıcının id'si
+ * @property {String} moderatorId - Kullanıcıyı karalisteye ekleyen moderatörün id'si
+ * @property {String} reason - Karalisteye eklenme sebebi
+ * @property {Number} createdTimestamp - Karalisteye eklenme zamanı
+ */
+
 class MongoDB {
 
 
@@ -125,11 +138,13 @@ class MongoDB {
         this.tickets = db.collection("Tickets");
         this.users = db.collection("Users");
         this.logs = db.collection("Logs");
+        this.blacklist = db.collection("Blacklist");
         this.counters = db.collection("Counters");
 
         this.tickets.createIndex({ channelId: 1 }, { unique: true });
         this.users.createIndex({ userId: 1 }, { unique: true });
         this.logs.createIndex({ ticketId: 1 }, { unique: true });
+        this.blacklist.createIndex({ userId: 1 }, { unique: true });
 
         // Uygulamada bir hata olduğunda konsola yazdır
         client.on("error", (error) => {
@@ -352,6 +367,48 @@ class MongoDB {
         return this.getTicketsByFilter({});
     }
 
+
+    /**
+     * @async
+     * MongoDB'den karalistede olan bir kullanıcıyı döndürür
+     * @param {String} userId - Kullanıcının id'si
+     * @returns {Promise<BlacklistObject>}
+     */
+    async getBlacklistedUser(userId) {
+        const cacheUser = blacklistCaches.get(userId);
+        if (cacheUser) return cacheUser;
+
+        const user = await this.blacklist.findOne({ userId });
+        if (user) {
+            blacklistCaches.set(userId, user);
+            return user;
+        }
+
+        return null;
+    }
+
+
+    /**
+     * @async
+     * MongoDB'den belirli bir filtreye göre karalistedeki kullanıcıları döndürür
+     * @param {mongodb.Filter<mongodb.BSON.Document>} filter 
+     * @returns {Promise<BlacklistObject[]>}
+     */
+    async getBlacklistedUsersByFilter(filter) {
+        const users = await this.blacklist.find(filter).toArray();
+        return users;
+    }
+
+
+    /**
+     * @async
+     * Bütün karalistedeki kullanıcıları döndürür
+     * @returns {Promise<BlacklistObject[]>}
+     */
+    async getAllBlacklistedUsers() {
+        return this.getBlacklistedUsersByFilter({});
+    }
+
     /**
      * @async
      * MongoDB'den ticket kanalının log verilerini döndürür
@@ -373,6 +430,17 @@ class MongoDB {
 
     // #endregion
 
+    // #region Has functions
+    /**
+     * @async
+     * Girilen ID'deki kullanının karalistede olup olmadığını kontrol eder
+     * @param {String} userId - Kullanıcının id'si
+     * @returns {Promise<Boolean>}
+     */
+    async isBlacklisted(userId) {
+        return blacklistCaches.has(userId) || Boolean(await this.blacklist.findOne({ userId }));
+    }
+    // #endregion
 
     // #region Create a new Ticket
     /**
@@ -403,6 +471,42 @@ class MongoDB {
     }
 
 
+    /**
+     * @async
+     * Bir kullanıcıyı karalisteye ekler
+     * @param {String} userId - Kullanıcının id'si
+     * @param {String} moderatorId - Kullanıcıyı karalisteye ekleyen moderatörün id'si
+     * @param {String} reason - Karalisteye eklenme sebebi
+     * @returns {Promise<Boolean>}
+     */
+    async addUserToBlacklist(userId, moderatorId, reason) {
+        const blacklist = {
+            userId,
+            moderatorId,
+            reason,
+            createdTimestamp: Date.now()
+        };
+
+        await this.blacklist.insertOne(blacklist);
+        blacklistCaches.set(userId, blacklist);
+        return true;
+    }
+    // #endregion
+
+    // #region Delete Blacklist User
+    /**
+     * @async
+     * Karalistedeki bir kişiyi siler
+     * @param {String} userId - Kullanıcının id'si
+     * @returns {Promise<Boolean>}
+     */
+    async removeUserFromBlacklist(userId) {
+        await this.blacklist.deleteOne({ userId });
+        blacklistCaches.delete(userId);
+        return true;
+    }
+
+
     // #region Save user or ticket
     /**
      * @async
@@ -423,7 +527,8 @@ class MongoDB {
         const key = {
             users: "userId",
             tickets: "channelId",
-            logs: "ticketId"
+            logs: "ticketId",
+            blacklist: "userId"
         }[collection];
 
         // Eğer hemen güncelleme yapılmasını istiyorsa

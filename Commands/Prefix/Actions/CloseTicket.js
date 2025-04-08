@@ -17,7 +17,8 @@ module.exports = {
         "ticket-closed",
     ],
     description: "Komut kullanılan kanalı kapatır (Eğer bilet kanalıysa)", // Komutun açıklaması
-    isAdmin: true,
+    isAdmin: true, // Komutun sadece yönetici tarafından kullanılabilir olduğunu belirtir
+    isOwner: false, // Komutun sadece bot sahibi tarafından kullanılabilir olduğunu belirtir
 
     /**
      * Parametrelerdeki isimlerin ne olduklarını tanımlar

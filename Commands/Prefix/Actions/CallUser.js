@@ -22,7 +22,8 @@ module.exports = {
         "ticket-call-user",
     ],
     description: "Komut kullanılan kanala bilet sahibini çağırır (Eğer bilet kanalıysa)", // Komutun açıklaması
-    isAdmin: true,
+    isAdmin: true, // Komutun sadece yönetici tarafından kullanılabilir olduğunu belirtir
+    isOwner: false, // Komutun sadece bot sahibi tarafından kullanılabilir olduğunu belirtir
 
     /**
      * Parametrelerdeki isimlerin ne olduklarını tanımlar

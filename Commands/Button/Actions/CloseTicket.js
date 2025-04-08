@@ -70,9 +70,11 @@ module.exports = {
             return Util.error(int, "Bilet kapatılırken bir hata oluştu! Lütfen daha sonra tekrar deneyin!");
         }
 
-        const closeTicketReason = Util.isMessage(int) ?
-            reason :
-            (process.env.FORM_ACTIVE == "1" ? int.fields.getTextInputValue("closeTicketReason") : Util.reasons.closed);
+        const closeTicketReason = (
+            Util.isMessage(int) ? 
+            reason : 
+            (process.env.FORM_ACTIVE == "1" && int.fields.getTextInputValue("closeTicketReason"))
+        ) || Util.reasons.closed;
 
         ticketInfo.status = "closed";
         ticketInfo.closedReason = closeTicketReason;

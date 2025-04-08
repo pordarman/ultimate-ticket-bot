@@ -9,6 +9,7 @@ const requiredEnvVariables = [
     "OWNER_IDS",
     "MOD_ROLE_IDS"
 ];
+const Util = require("../Helpers/Util.js");
 
 module.exports = function validateEnv() {
     const missing = [];
@@ -20,11 +21,11 @@ module.exports = function validateEnv() {
     }
 
     if (missing.length > 0) {
-        console.error("\n🚨 .env dosyasında eksik değişkenler bulundu:");
+        Util.console.error("\n🚨 .env dosyasında eksik değişkenler bulundu:");
         for (const key of missing) {
-            console.error(`- ${key}`);
+            Util.console.error(`- ${key}`);
         }
-        console.error("\nLütfen .env dosyanı kontrol et ve eksik değerleri tamamla.\n");
+        Util.console.error("\nLütfen .env dosyanı kontrol et ve eksik değerleri tamamla.\n");
         process.exit(1); // Uygulama başlatılmasın
     }
 };

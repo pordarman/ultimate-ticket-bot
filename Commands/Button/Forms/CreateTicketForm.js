@@ -6,6 +6,8 @@ const {
     TextInputStyle,
     ActionRowBuilder,
 } = require("discord.js");
+const database = require("../../../Helpers/Database.js");
+const Util = require("../../../Helpers/Util.js");
 
 module.exports = {
     name: "createTicketForm",
@@ -15,6 +17,10 @@ module.exports = {
      * @param {ButtonInteraction} int - Button
      */
     async execute(int) {
+
+        // Eğer kişi yasaklı kullanıcılar arasındaysa hata ver
+        const isBlacklisted = await database.isBlacklisted(int.user.id);
+        if (isBlacklisted) return Util.error(int, "Bilet açma yetkiniz olmadığı için bu işlemi gerçekleştiremiyorum! Eğer bu hatayı yanlışlıkla alıyorsanız lütfen sunucu yöneticinizle iletişime geçin.");
 
         // Önce modal aç ve kullanıcaıya şu soruları sor:
         // 1. Kategoriyi seçsin (Genel Destek, Öneri, Şikayet, Diğer)

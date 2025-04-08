@@ -87,9 +87,11 @@ module.exports = {
             return Util.error(int, "Ticket arşivlenirken bir hata oluştu! Lütfen daha sonra tekrar deneyin!");
         }
 
-        const archiveTicketReason = Util.isMessage(int) ?
-            reason :
-            (process.env.FORM_ACTIVE == "1" ? int.fields.getTextInputValue("archiveTicketReason") : Util.reasons.archived);
+        const archiveTicketReason = (
+            Util.isMessage(int) ? 
+            reason : 
+            (process.env.FORM_ACTIVE == "1" && int.fields.getTextInputValue("archiveTicketReason"))
+        ) || Util.reasons.archived;
 
         await Promise.all([
             database.updateTicket(int.channelId, {

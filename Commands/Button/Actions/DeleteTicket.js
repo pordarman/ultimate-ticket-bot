@@ -28,9 +28,11 @@ module.exports = {
         // Ticketi kalıcı olarak kapat ve kullanıcının bilgilerini de düzenle
         const userTicketInfo = await database.getUser(ticketInfo.authorId);
 
-        const permanentCloseTicket = Util.isMessage(int) ?
-            reason :
-            (process.env.FORM_ACTIVE == "1" ? int.fields.getTextInputValue("permanentCloseTicketReason") : Util.reasons.permclosed);
+        const permanentCloseTicketReason = (
+            Util.isMessage(int) ?
+                reason :
+                (process.env.FORM_ACTIVE == "1" && int.fields.getTextInputValue("permanentCloseTicketReason"))
+        ) || Util.reasons.permclosed;
 
         const embed = new EmbedBuilder()
             .setDescription(`**• Ticket kanalı kalıcı olarak kapatılıyor...**`)
@@ -41,7 +43,7 @@ module.exports = {
 
         ticketInfo.permClosedTimestamp = NOW;
         ticketInfo.lastUpdatedTimestamp = NOW;
-        ticketInfo.closedReason = permanentCloseTicket;
+        ticketInfo.closedReason = permanentCloseTicketReason;
         ticketInfo.closedBy = int.user.id;
         ticketInfo.status = "perm_closed";
 
@@ -71,15 +73,14 @@ module.exports = {
             }
             catch (error) {
                 Util.console.error(error);
-                Util.error(int, "Ticket kanalı silinirken bir hata oluştu! Lütfen daha sonra tekrar deneyin!");
-                return;
+                return Util.error(int, "Ticket kanalı silinirken bir hata oluştu! Lütfen daha sonra tekrar deneyin!");
             }
 
             await Promise.all([
                 database.updateTicket(channelId, {
                     $set: {
                         status: "perm_closed",
-                        closedReason: permanentCloseTicket,
+                        closedReason: permanentCloseTicketReason,
                         closedBy: int.user.id,
                         permClosedTimestamp: NOW,
                         lastUpdatedTimestamp: NOW
@@ -100,7 +101,7 @@ module.exports = {
                     action: "ticket_permclosed",
                     timestamp: NOW,
                     by: int.user.id,
-                    reason: permanentCloseTicket,
+                    reason: permanentCloseTicketReason,
                     ticketAuthorId: ticketInfo.authorId,
                     otherInfo: {
                         ticketAuthorUserName: ticketAuthor.tag,

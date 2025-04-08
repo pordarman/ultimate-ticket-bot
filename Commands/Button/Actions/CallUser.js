@@ -14,8 +14,9 @@ module.exports = {
      * Parametrelerdeki isimlerin ne olduklarını tanımlar
      * @param {ModalSubmitInteraction} int - Modal
      * @param {String} ticketAuthorId - Ticket sahibi ID'si
+     * @param {String} reason - Eğer bu komut prefix kullanarak çağırılmışsa sebebi mesajdan alacağız aksi halde formlardan alacağız
      */
-    async execute(int, ticketAuthorId) {
+    async execute(int, ticketAuthorId, reason) {
 
         // Eğer kişi yönetici değilse
         if (!Util.isModerator(int.member)) return Util.error(int, "Bu işlemi yapabilmek için yeterli yetkiniz yok!");
@@ -120,7 +121,11 @@ module.exports = {
         delete ticketInfo.closedTimestamp;
         delete ticketInfo.archivedTimestamp;
 
-        const callUserReason = process.env.FORM_ACTIVE == "1" ? int.fields.getTextInputValue("callUserReason") : Util.reasons.call
+        const callUserReason = (
+            Util.isMessage(int) ? 
+            reason : 
+            (process.env.FORM_ACTIVE == "1" && int.fields.getTextInputValue("callUserReason"))
+        ) || Util.reasons.call;
 
         // Databaseye kaydet
         await Promise.all([

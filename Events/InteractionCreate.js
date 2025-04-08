@@ -29,7 +29,7 @@ module.exports = {
             // Eğer komutun çalışması için gerekli rolleri veya yetkisi yoksa
             if (command.isAdmin && !int.member.permissions.has(PermissionFlagsBits.Administrator)) {
                 const memberRoles = new Set(Array.isArray(msg.member.roles) ? msg.member.roles : msg.member.roles.cache.map(role => role.id));
-                const requiredRoles = process.env.ADMIN_ROLES?.split(",")?.map(role => role.trim()) || [];
+                const requiredRoles = process.env.MOD_ROLE_IDS?.split(",")?.map(role => role.trim()) || [];
 
                 const hasRequiredRole = requiredRoles.some(role => memberRoles.has(role));
                 if (!hasRequiredRole) return Util.error(int, `Bu işlemi yapamazsın!`);

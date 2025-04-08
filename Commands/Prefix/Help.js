@@ -20,7 +20,8 @@ module.exports = {
         "helpcommand",
     ],
     description: "Yardım komutunu gösterir", // Komutun açıklaması
-    isAdmin: true,
+    isAdmin: true, // Komutun sadece yönetici tarafından kullanılabilir olduğunu belirtir
+    isOwner: false, // Komutun sadece bot sahibi tarafından kullanılabilir olduğunu belirtir.
 
     /**
      * Parametrelerdeki isimlerin ne olduklarını tanımlar

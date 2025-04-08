@@ -13,6 +13,8 @@ module.exports = {
         "gönder",
     ],
     description: "Ticket mesajını gönderir", // Komutun açıklaması
+    isAdmin: false, // Komutun sadece yönetici tarafından kullanılabilir olduğunu belirtir
+    isOwner: true, // Komutun sadece bot sahibi tarafından kullanılabilir olduğunu belirtir.
 
     /**
      * Parametrelerdeki isimlerin ne olduklarını tanımlar

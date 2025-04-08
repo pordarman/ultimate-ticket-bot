@@ -2,7 +2,7 @@
 const {
     Message,
 } = require("discord.js");
-const Util = require("../../../Helpers/Util");
+const Util = require("../../../Helpers/Util.js");
 const buttonCommand = require("../../Button/Actions/ArchiveTicket.js")
 
 module.exports = {
@@ -20,7 +20,8 @@ module.exports = {
         "ticket-archived",
     ],
     description: "Komut kullanılan kanalı arşivler (Eğer bilet kanalıysa)", // Komutun açıklaması
-    isAdmin: true,
+    isAdmin: true, // Komutun sadece yönetici tarafından kullanılabilir olduğunu belirtir
+    isOwner: false, // Komutun sadece bot sahibi tarafından kullanılabilir olduğunu belirtir
 
     /**
      * Parametrelerdeki isimlerin ne olduklarını tanımlar
