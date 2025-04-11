@@ -40,7 +40,6 @@ module.exports = {
 
             // Komutu çalıştırmaya çalış
             try {
-                Util.console.log(`Kullanıcı: ${int.user.tag} | Buton: ${customId} | Argümanlar: ${args}`);
                 await command.execute(int, ...args);
             } catch (error) {
                 int.reply({
@@ -61,7 +60,6 @@ module.exports = {
 
             // Komutu çalıştırmaya çalış
             try {
-                Util.console.log(`Kullanıcı: ${int.user.tag} | Slash: ${int.commandName}`);
                 await command.execute(int);
             } catch (error) {
                 int.reply({

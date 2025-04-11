@@ -48,7 +48,6 @@ module.exports = {
         if (!msg.guild.members.me.permissions.has(PermissionFlagsBits.ManageChannels)) return Util.error(msg, `Botun "Kanalı Yönet" yetkisi yok!`);
 
         try {
-            Util.console.log(`Kullanıcı: ${msg.author.tag} | Komut: ${commandName} | Argümanlar: ${args.join(" ") || "*Hiçbir argüman yok*"} | Kanal: ${msg.channel.name}`);
             await command.execute(msg, args);
         } catch (error) {
             msg.reply("Komut çalıştırılırken bir hata oluştu! Hata bilgileri konsolda gösterilecektir");

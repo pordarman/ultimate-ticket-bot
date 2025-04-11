@@ -266,7 +266,7 @@ class MongoDB {
     }
 
 
-    // #region Get data from cache or database
+    // #region Get
     /**
      * @async
      * Ticket kanalının numarasını döndürür
@@ -298,7 +298,7 @@ class MongoDB {
         const cacheUser = userCaches.get(userId);
         if (cacheUser) return cacheUser;
 
-        const user = await this.users.findOne({ userId });
+        const user = await this.users.findOne({ userId }, { projection: { _id: 0 } });
         if (user) {
             userCaches.set(userId, user);
             return user;
@@ -336,7 +336,7 @@ class MongoDB {
         const cacheTicket = ticketCaches.get(channelId);
         if (cacheTicket) return cacheTicket;
 
-        const ticket = await this.tickets.findOne({ channelId });
+        const ticket = await this.tickets.findOne({ channelId }, { projection: { _id: 0 } });
         if (ticket) {
             ticketCaches.set(channelId, ticket);
             return ticket;
@@ -378,7 +378,7 @@ class MongoDB {
         const cacheUser = blacklistCaches.get(userId);
         if (cacheUser) return cacheUser;
 
-        const user = await this.blacklist.findOne({ userId });
+        const user = await this.blacklist.findOne({ userId }, { projection: { _id: 0 } });
         if (user) {
             blacklistCaches.set(userId, user);
             return user;
@@ -419,7 +419,7 @@ class MongoDB {
         const cacheLog = logCaches.get(ticketId);
         if (cacheLog) return cacheLog;
 
-        const log = await this.logs.findOne({ ticketId });
+        const log = await this.logs.findOne({ ticketId }, { projection: { _id: 0 } });
         if (log) {
             logCaches.set(ticketId, log);
             return log;
@@ -430,7 +430,7 @@ class MongoDB {
 
     // #endregion
 
-    // #region Has functions
+    // #region Has
     /**
      * @async
      * Girilen ID'deki kullanının karalistede olup olmadığını kontrol eder
@@ -438,11 +438,11 @@ class MongoDB {
      * @returns {Promise<Boolean>}
      */
     async isBlacklisted(userId) {
-        return blacklistCaches.has(userId) || Boolean(await this.blacklist.findOne({ userId }));
+        return Boolean(await this.getBlacklistedUser(userId));
     }
     // #endregion
 
-    // #region Create a new Ticket
+    // #region Create
     /**
      * @async
      * Ticket kanalı oluşturur
@@ -493,7 +493,7 @@ class MongoDB {
     }
     // #endregion
 
-    // #region Delete Blacklist User
+    // #region Delete
     /**
      * @async
      * Karalistedeki bir kişiyi siler
@@ -507,7 +507,7 @@ class MongoDB {
     }
 
 
-    // #region Save user or ticket
+    // #region Save
     /**
      * @async
      * MongoDB'deki kullanıcıyı veya ticket'i günceller
@@ -621,7 +621,7 @@ class MongoDB {
 
     // #endregion
 
-    // #region Log ticket
+    // #region Log
     /**
      * @async
      * Ticket koleksiyonuna log mesajı ekler
@@ -665,7 +665,19 @@ class MongoDB {
     // #endregion
 
 
-    // #region General functions
+    // #region General
+
+    /**
+     * @async
+     * Önbellekleri temizler
+     * @returns {void}
+     */
+    resetCache() {
+        userCaches.clear();
+        ticketCaches.clear();
+        logCaches.clear();
+        blacklistCaches.clear();
+    }
 
     /**
      * @async
