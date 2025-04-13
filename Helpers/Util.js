@@ -22,7 +22,7 @@ const prefixCommands = new Map();
 const prefixCommandWithId = new Map();
 const buttonCommands = new Map();
 const slashCommands = new Map();
-let slashDataJSON = [];
+const slashDataJSON = [];
 
 /**
  * @typedef {Object} Command
@@ -218,7 +218,7 @@ class Util {
      * Slash komutları için JSON verisini temizler
      */
     clearSlashDataJSON() {
-        slashDataJSON = [];
+        slashDataJSON.length = 0;
     }
 
 

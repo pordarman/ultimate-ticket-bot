@@ -119,7 +119,7 @@ module.exports = {
             return;
         }
 
-        Util.sendTicketMessage(ticketChannel);
+        if (process.env.SEND_MESSAGE == "1") Util.sendTicketMessage(ticketChannel);
 
         // Slash komutlarını yükle
         client.guilds.cache.forEach(async (guild) => {
