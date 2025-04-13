@@ -151,12 +151,14 @@ class MongoDB {
             console.error(error);
         });
 
+        const Util = require("./Util");
+
         // Uygulama kapatıldığında MongoDB bağlantısını kapat
         const shutdown = async () => {
             if (isClosing) return;
             isClosing = true;
 
-            console.log("Uygulama kapanıyor, MongoDB bağlantısı kapatılıyor...");
+            Util.console.log("Uygulama kapanıyor, MongoDB bağlantısı kapatılıyor...");
 
             // MongoDB bağlantısını kapatmadan önce bütün timeout'ları çalıştır
             await Promise.all([...updateTimers.keys()].map(async (key) => {
@@ -172,7 +174,7 @@ class MongoDB {
             }));
 
             await client.close(true);
-            console.log("MongoDB bağlantısı kapatıldı!");
+            Util.console.log("MongoDB bağlantısı kapatıldı!");
             process.exit(0);
         };
 
