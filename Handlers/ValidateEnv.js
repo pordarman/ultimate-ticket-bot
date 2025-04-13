@@ -5,7 +5,6 @@ const requiredEnvVariables = [
     "FORM_ACTIVE",
     "MONGO_URI",
     "TICKET_DIGIT_COUNT",
-    "GUILD_ID",
     "OWNER_IDS",
     "MOD_ROLE_IDS"
 ];

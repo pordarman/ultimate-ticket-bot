@@ -7,7 +7,7 @@ const Util = require("../Helpers/Util.js");
 
 module.exports = {
     name: "voiceStateUpdate",
-    
+
     /**
      * Parametrelerdeki isimlerin ne olduklarını tanımlar
      * @param {VoiceState} oldVoice - Eski ses durumu
@@ -16,17 +16,25 @@ module.exports = {
     async run(oldVoice, newVoice) {
         try {
 
-            // Eğer sunucu destek sunucusu değilse veya Alisa Guard değilse hiçbir şey yapma
-            if (newVoice.guild.id != process.env.GUILD_ID || newVoice.member.id != newVoice.client.user.id) return;
+            // Eğer process.env.VOICE_CHANNEL_ID yoksa veya bot bizim bot değilse hiçbir şey yapma
+            if (
+                !process.env.VOICE_CHANNEL_ID ||
+                newVoice.member.id != newVoice.client.user.id
+            ) return;
 
-            // Eğer bot Alisa Guard ise ve ses kanalından çıkmışsa tekrar ses kanalına giriş yap 
-            if (!newVoice.channelId) DiscordVoice.joinVoiceChannel({
-                channelId: oldVoice.channelId,
-                guildId: oldVoice.guild.id,
-                adapterCreator: newVoice.guild.voiceAdapterCreator,
-                selfDeaf: true,
-                selfMute: true
-            });
+            // Eğer yeni ses durumu yoksa voice kanalına katıl
+            if (!newVoice.channelId) {
+                // 1 saniye gecikmeli bir şekilde çalıştır
+                setTimeout(async () => {
+                    DiscordVoice.joinVoiceChannel({
+                        channelId: process.env.VOICE_CHANNEL_ID.trim(),
+                        guildId: oldVoice.guild.id,
+                        adapterCreator: newVoice.guild.voiceAdapterCreator,
+                        selfDeaf: true,
+                        selfMute: true
+                    });
+                }, 1 * 1000);
+            }
         } catch (e) {
             Util.console.error(e);
         }

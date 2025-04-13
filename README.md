@@ -47,13 +47,15 @@ PREFIX=! # Prefix
 FORM_ACTIVE=1 # 1: Aktif, 0: Pasif
 MONGO_URI= # MongoDB Atlas URI
 TICKET_DIGIT_COUNT=6 # Ticket ID basamak sayısı
-GUILD_ID= # Sunucu ID
+
 VOICE_CHANNEL_ID= # Ses kanalı ID
 TICKET_CHANNEL_ID= # Ticket mesaj kanalı ID
 LOG_CHANNEL_ID= # Log kanalı ID
+
 OPENED_TICKET_CATEGORY_ID= # Açık ticket kategorisi
 CLOSED_TICKET_CATEGORY_ID= # Kapalı ticket kategorisi
 ARCHIVED_TICKET_CATEGORY_ID= # Arşiv ticket kategorisi
+
 OWNER_IDS= # Bot sahibi ID'leri
 MOD_ROLE_IDS= # Yetkili rol ID'leri
 ```
