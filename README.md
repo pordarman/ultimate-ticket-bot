@@ -74,6 +74,7 @@ MOD_ROLE_IDS= # Yetkili rol ID'leri
 4. IP Whitelist: `0.0.0.0/0`
 5. "Connect > Connection String Only" seçin
 6. URI'yi `.env` dosyasına yapıştırın
+7. "Collection" sekmesine gelin ve "Tickets", "Users", "Logs", "Blacklist", "Counters" adlarında yeni koleksiyonlar oluşturun
 
 ---
 

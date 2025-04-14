@@ -244,14 +244,14 @@ class Util {
              * @param {String} message 
              * @returns 
              */
-            error: (message) => console.log(chalk.red(`[ERROR] ${message}`)),
+            error: (message) => console.error(chalk.red(`[ERROR] ${message}`)),
 
             /**
              * Turuncu bir uyarı mesajı gönderir (Örnek: [WARN] Uyarı log mesajı)
              * @param {String} message 
              * @returns 
              */
-            warn: (message) => console.log(chalk.hex("#FFA500")(`[WARN] ${message}`)),
+            warn: (message) => console.warn(chalk.hex("#FFA500")(`[WARN] ${message}`)),
         }
     }
 
