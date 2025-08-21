@@ -33,7 +33,7 @@ cd ultimate-ticket-bot
 npm install
 ```
 
-![Klasör yapısı](assets/klasor_yapisi.png)
+[![Klasör yapısı](https://i.hizliresim.com/df6c1bm.png)](https://hizliresim.com/df6c1bm)
 
 ---
 
@@ -62,7 +62,7 @@ MOD_ROLE_IDS= # Yetkili rol ID'leri
 
 > 📃 `.env.example` dosyasını kopyalayarak kullanabilirsiniz.
 
-![env dosyası](assets/env_ornek.png)
+[![env dosyası](https://i.hizliresim.com/5567690.png)](https://hizliresim.com/5567690)
 
 ---
 
@@ -83,7 +83,7 @@ MOD_ROLE_IDS= # Yetkili rol ID'leri
 1. Discord Ayarlar > Gelişmiş > Geliştirici Modu > Aç
 2. İlgili kullanıcı/rol/kanala sağ tık > "ID'yi Kopyala"
 
-![ID kopyalama](assets/id_kopyalama.png)
+[![ID kopyalama](https://i.hizliresim.com/nqmhwaw.png)](https://hizliresim.com/nqmhwaw)
 
 ---
 
@@ -145,9 +145,9 @@ pm2 restart TicketBot
 
 ## 🔗 Bağlantılar
 
-![Form](assets/bilet_form.png)
-![Ticket](assets/bilet_acma.png)
-![Log](assets/log_ornek.png)
+[![Form](https://i.hizliresim.com/alaxc9p.png)](https://hizliresim.com/alaxc9p)
+[![Ticket](https://i.hizliresim.com/jbckhjk.png)](https://hizliresim.com/jbckhjk)
+[![Log](https://i.hizliresim.com/85jlrh6.png)](https://hizliresim.com/85jlrh6)
 
 ---
 
